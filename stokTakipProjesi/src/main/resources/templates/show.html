@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-gray-100" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="h-full">
+
+<div class="min-h-full">
+    <nav class="bg-gray-800">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div class="flex h-16 items-center justify-between">
+                <div class="flex items-center">
+                    <div class="shrink-0">
+                        <img class="size-8" src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=500" alt="Your Company">
+                    </div>
+                    <div class="hidden md:block">
+                        <div class="ml-10 flex items-baseline space-x-4">
+                            <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
+                            <a th:href="@{/}" class="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white" aria-current="page">Ürün</a>
+                            <a th:href="@{/depo}"  class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Depo</a>
+                            <a th:href="@{/stokHareket/cokSatanlar}" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Çok Satanlar</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </nav>
+
+    <header class="bg-white shadow">
+        <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+            <h1 class="text-3xl font-bold tracking-tight text-gray-900" th:text="${urun.ad}" ></h1>
+        </div>
+    </header>
+    <main>
+        <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+           <table class="table-auto w-full">
+             <tr>
+                 <th class="uppercase border text-left px-6 bg-gray-800 text-white">ID</th>
+                 <td class="px-6 py-4 border bg-white" th:text="${urun.id}"></td>
+             </tr>
+               <tr>
+                   <th class="uppercase border text-left px-6 bg-gray-800 text-white">AD</th>
+                   <td class="px-6 py-4 border bg-white" th:text="${urun.ad}"></td>
+               </tr>
+               <tr>
+                   <th class="uppercase border text-left px-6 bg-gray-800 text-white">MARKA</th>
+                   <td class="px-6 py-4 border bg-white" th:text="${urun.marka}"></td>
+               </tr>
+               <tr>
+                   <th class="uppercase border text-left px-6 bg-gray-800 text-white">ADET</th>
+                   <td class="px-6 py-4 border bg-white" th:text="${urun.adet}"></td>
+               </tr>
+               <tr>
+                   <th class="uppercase border text-left px-6 bg-gray-800 text-white">TARİH</th>
+                   <td class="px-6 py-4 border bg-white" th:text="${urun.tarih}"></td>
+               </tr>
+               <tr>
+                   <th class="uppercase border text-left px-6 bg-gray-800 text-white">TARİH</th>
+                   <td class="px-6 py-4 border bg-white" th:text="${urun.depo != null ? urun.depo.ad : 'Depo Yok'}"></td>
+               </tr>
+           </table>
+            <br>
+            <div id="stokModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
+                <div class="bg-white p-6 rounded-lg">
+                    <h2 id="modalTitle" class="text-lg font-bold mb-4"></h2>
+                    <form th:action="@{/stokHareket}" method="post">
+                        <input type="hidden" name="urunId" th:value="${urun.id}">
+                        <input type="hidden" name="hareketTipi" id="hareketTipi">
+                        <label for="miktar" class="block mb-2">Miktar:</label>
+                        <input type="number" id="miktar" name="miktar" class="border rounded p-2 w-full" required>
+                        <div class="mt-4 flex space-x-2">
+                            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Onayla</button>
+                            <button type="button" class="bg-gray-500 text-white px-4 py-2 rounded" onclick="toggleModal()">İptal</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <button type="button" onclick="openModal('Ürün Alımı Yap', 'giriş')" class="rounded-md bg-blue-500 px-4 py-2 text-white hover:bg-blue-600">
+                Ürün Alımı Yap
+            </button>
+            <button type="button" onclick="openModal('Ürün Satışı Yap', 'çıkış')" class="rounded-md bg-green-500 px-4 py-2 text-white hover:bg-green-600">
+                Ürün Satışı Yap
+            </button>
+
+            <script>
+                function openModal(title, hareketTipi) {
+                    document.getElementById("modalTitle").innerText = title;
+                    document.getElementById("hareketTipi").value = hareketTipi;
+                    document.getElementById("stokModal").classList.remove("hidden");
+                }
+                function toggleModal() {
+                    document.getElementById("stokModal").classList.add("hidden");
+                }
+            </script>
+            <div th:if="${success}" class="bg-green-100 text-green-800 p-4 rounded">
+                <p th:text="${success}"></p>
+            </div>
+            <div th:if="${error}" class="bg-red-100 text-red-800 p-4 rounded">
+                <p th:text="${error}"></p>
+            </div>
+
+        </div>
+    </main>
+</div>
+
+</body>
+</html>
+
