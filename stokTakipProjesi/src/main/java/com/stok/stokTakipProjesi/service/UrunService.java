@@ -12,9 +12,11 @@ import java.util.Optional;
 public class UrunService {
 
     private final UrunRepository urunRepository;
+    private final StokHareketService stokHareketService;
 
-    public UrunService(UrunRepository urunRepository) {
+    public UrunService(UrunRepository urunRepository, StokHareketService stokHareketService) {
         this.urunRepository = urunRepository;
+        this.stokHareketService = stokHareketService;
     }
 
 
@@ -34,4 +36,10 @@ public class UrunService {
 
         urunRepository.deleteById(id);
     }
+
+    public void deleteUrunAndStokHareket(Long id) {
+        stokHareketService.deleteAllByUrunId(id); // Önce ürüne bağlı stok hareketlerini sil
+        urunRepository.deleteById(id); // ürünü sil
+    }
+
 }
