@@ -15,5 +15,7 @@ public interface StokHareketRepository extends JpaRepository<StokHareket ,Long> 
             "GROUP BY sh.urun " +
             "ORDER BY toplamMiktar DESC")
     List<Object[]> findTopSellingProducts();
+
+    List<StokHareket> findAllByUrunId(Long id);
 }
 
