@@ -23,4 +23,9 @@ public class StokHareketService {
     public List<Object[]> getTopSellingProducts() {
         return stokHareketRepository.findTopSellingProducts();
     }
+
+    public void deleteAllByUrunId(Long id) {
+        List<StokHareket> stokHareketler = stokHareketRepository.findAllByUrunId(id);
+        stokHareketRepository.deleteAll(stokHareketler);
+    }
 }
