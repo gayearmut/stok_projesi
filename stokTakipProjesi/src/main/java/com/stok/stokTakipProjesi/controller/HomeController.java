@@ -75,11 +75,23 @@ public class HomeController {
                 .ifPresent(urun -> model.addAttribute("urun",urun));
         return "show";
     }
-
+/*
     @GetMapping("urun/{id}/delete")
     public String delete(@PathVariable long id, RedirectAttributes redirectAttributes){
         urunService.deleteById(id);
         redirectAttributes.addFlashAttribute("message","Ürün başarıyla silindi!");
         return "redirect:/";
+    }*/
+
+    @GetMapping("urun/{id}/delete")
+    public String deleteUrun(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        try {
+            urunService.deleteUrunAndStokHareket(id);
+            redirectAttributes.addFlashAttribute("message", "Ürün başarıyla silindi!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Silme işlemi sırasında bir hata oluştu: " + e.getMessage());
+        }
+        return "redirect:/";
+
     }
 }
