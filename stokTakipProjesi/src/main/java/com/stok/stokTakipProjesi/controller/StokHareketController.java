@@ -32,6 +32,10 @@ public class StokHareketController {
             redirectAttributes.addFlashAttribute("error", "Ürün bulunamadı!");
             return "redirect:/";
         }
+         if (miktar <= 0) {
+            redirectAttributes.addFlashAttribute("error", "İşlem başarısız! Miktar sıfırdan büyük olmalıdır.Lütfen geçerli bir miktar giriniz.");
+            return "redirect:/urun/" + urunId;
+        }
         try {
             if ("giriş".equals(hareketTipi)) {
                 urun.setAdet(urun.getAdet() + miktar);
