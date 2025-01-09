@@ -41,6 +41,7 @@
             <table class="table-auto w-full border">
                 <thead>
                 <tr class="bg-gray-800 text-white">
+                    <th class="px-4 py-2 border">Ürün ID</th>
                     <th class="px-4 py-2 border">Ürün Adı</th>
                     <th class="px-4 py-2 border">Ürün Markası</th>
                     <th class="px-4 py-2 border">Toplam Satış Miktarı</th>
@@ -48,6 +49,7 @@
                 </thead>
                 <tbody>
                 <tr th:each="row : ${topSellingProducts}">
+                    <td class="px-4 py-2 border bg-white" th:text="${row[0].id}"></td>
                     <td class="px-4 py-2 border bg-white" th:text="${row[0].ad}"></td>
                     <td class="px-4 py-2 border bg-white" th:text="${row[0].marka}"></td>
                     <td class="px-4 py-2 border bg-white" th:text="${row[1]}"></td>
