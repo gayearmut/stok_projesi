@@ -70,28 +70,21 @@ public class HomeController {
     }
 
     @GetMapping("urun/{id}")
-    public String show(@PathVariable long id, Model model){
+    public String show(@PathVariable long id, Model model) {
         urunService.findById(id)
-                .ifPresent(urun -> model.addAttribute("urun",urun));
-        return "show";
+                .ifPresent(urun -> model.addAttribute("urun", urun));
+        return "siparisOlustur";
     }
-/*
-    @GetMapping("urun/{id}/delete")
-    public String delete(@PathVariable long id, RedirectAttributes redirectAttributes){
-        urunService.deleteById(id);
-        redirectAttributes.addFlashAttribute("message","Ürün başarıyla silindi!");
-        return "redirect:/";
-    }*/
 
     @GetMapping("urun/{id}/delete")
     public String deleteUrun(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         try {
-            urunService.deleteUrunAndStokHareket(id);
-            redirectAttributes.addFlashAttribute("message", "Ürün başarıyla silindi!");
+            urunService.deleteUrunAndCheckSiparis(id); // Güncellenmiş silme metodunu çağır
+            redirectAttributes.addFlashAttribute("message", "Ürün ve ilişkili iptal edilen siparişler başarıyla silindi!");
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Silme işlemi sırasında bir hata oluştu: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("error", "Ürün silinemedi: " + e.getMessage());
         }
         return "redirect:/";
-
     }
+
 }
