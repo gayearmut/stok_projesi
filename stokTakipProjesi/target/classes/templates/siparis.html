@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-gray-100" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="h-full">
+
+<div class="min-h-full">
+    <nav class="bg-gray-800">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div class="flex h-16 items-center justify-between">
+                <div class="flex items-center">
+                    <div class="shrink-0">
+                        <img class="size-8" src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=500" alt="Your Company">
+                    </div>
+                    <div class="hidden md:block">
+                        <div class="ml-10 flex items-baseline space-x-4">
+                            <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
+                            <a th:href="@{/anasayfa}" class="rounded-md px-3 py-2 text-sm font-medium text-white" aria-current="page">Anasayfa</a>
+                            <a th:href="@{/}" class="rounded-md  px-3 py-2 text-sm font-medium text-white" aria-current="page">Ürün</a>
+                            <a th:href="@{/depo}"  class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Depo</a>
+                            <a th:href="@{/siparis}" class="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Sipariş Listesi</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </nav>
+
+    <header class="bg-white shadow">
+        <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+            <h1 class="text-3xl font-bold tracking-tight text-gray-900">Dashboard</h1>
+        </div>
+    </header>
+    <main>
+        <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+            <!-- Filtreleme Formu -->
+            <form th:action="@{/siparis/filtrele}" method="get" class="mb-5">
+                <label for="durum" class="block text-sm font-medium text-gray-700">Sipariş Durumu</label>
+                <select id="durum" name="durum" class="mt-1 block w-full rounded-md border-gray-600 shadow-sm focus:border-indigo-600 focus:ring-indigo-600 text-sm py-2">
+                    <option value="">Tüm Durumlar</option>
+                    <option th:each="durum : ${T(com.stok.stokTakipProjesi.model.SiparisDurumu).values()}"
+                            th:value="${durum}"
+                            th:text="${durum}"></option>
+                </select>
+                <div class="flex justify-end mt-2">
+                    <button type="submit" class="bg-pink-500 text-white px-4 py-2 rounded-md hover:bg-pink-600">Filtrele</button>
+                </div>
+            </form>
+
+
+            <div th:if="${message}" class="bg-green-200 border border-green-400 border-solid mb-5 p-2 rounded-md text-green-900">
+                <p th:text="${message}"></p>
+            </div>
+            <div th:if="${error}" class="bg-red-200 border border-red-400 border-solid mb-5 p-2 rounded-md text-red-900">
+                <p th:text="${error}"></p>
+            </div>
+            <a th:href="@{'/siparis/siparisOlustur'}" class="bg-blue-600 font-medium px-3 py-2 rounded-md text-sm text-white inline-block mb-5 hover:bg-blue-700"> Sipariş Oluştur</a>
+
+            <table class="table-auto w-full">
+                <thead class="bg-gray-800 text-white uppercase">
+                <tr>
+                    <th class="px-6 py-3 text-center">ID</th>
+                    <th class="px-6 py-3 text-center">Ürün</th>
+                    <th class="px-6 py-3 text-center">Kullanıcı Adı</th>
+                    <th class="px-6 py-3 text-center">Kullanıcı Soyadı</th>
+                    <th class="px-6 py-3 text-center">Sipariş Tarihi</th>
+                    <th class="px-6 py-3 text-center">Sipariş Durumu</th>
+                    <th class="px-6 py-3 text-center">Ürün Miktarı</th>
+                    <th>&nbsp;</th>
+                    <th>&nbsp;</th>
+                </tr>
+
+                </thead>
+                <tbody>
+                <tr class="bg-white border-b" th:each="siparis: ${siparisList}">
+                    <td class="px-6 py-5 text-center" th:text="${siparis.id}"></td>
+                    <td class="px-6 py-5 text-center" th:text="${siparis.urun.ad}"></td>
+                    <td class="px-6 py-5 text-center" th:text="${siparis.kullaniciAdi}"></td>
+                    <td class="px-6 py-5 text-center" th:text="${siparis.kullaniciSoyadi}"></td>
+                    <td class="px-6 py-5 text-center" th:text="${siparis.siparisTarihi}"></td>
+                    <td class="px-6 py-5 text-center" th:text="${siparis.siparisDurumu}"></td>
+                    <td class="px-6 py-5 text-center" th:text="${siparis.miktar}"></td>
+                    <td class="px-6 py-3 text-center">
+                        <!-- Sipariş Durumu = 0 (OLUŞTURULDU) ise "Onayla" ve "Reddet" butonları görünecek -->
+                        <div th:if="${siparis.siparisDurumu.value == 0}" class="flex space-x-2">
+                            <a th:href="@{/siparis/onayla/{id}(id=${siparis.id})}"
+                               class="bg-blue-600 font-medium hover:bg-blue-700 px-4 py-2 rounded-md text-sm text-white">
+                                Onayla
+                            </a>
+                            <a th:href="@{/siparis/reddet/{id}(id=${siparis.id})}"
+                               class="bg-red-600 font-medium hover:bg-red-700 px-4 py-2 rounded-md text-sm text-white">
+                                Reddet
+                            </a>
+                        </div>
+
+                        <!-- Sipariş Durumu = 1 (ONAYLANDI) ise "İptal Et" butonu görünecek -->
+                        <div th:if="${siparis.siparisDurumu.value == 1}">
+                            <a th:href="@{/siparis/iptal/{id}(id=${siparis.id})}"
+                               class="bg-yellow-600 font-medium hover:bg-yellow-700 px-4 py-2 rounded-md text-sm text-white">
+                                İptal Et
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+
+            </table>
+        </div>
+    </main>
+</div>
+
+</body>
+</html>
+
